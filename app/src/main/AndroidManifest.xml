@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,13 +16,16 @@
         android:theme="@style/Theme.NovigradService"
         tools:targetApi="31">
         <activity
+            android:name=".AdminScreens.AddLicenseServiceActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminScreens.AdminMainActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_main"
             android:theme="@style/Theme.NovigradService" />
         <activity
             android:name=".Screens.SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,9 +37,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

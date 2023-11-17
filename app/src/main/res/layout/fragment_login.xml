@@ -68,6 +68,7 @@
                 android:layout_height="55dp"
                 android:text="Login"
                 android:textColor="@color/white"
+                app:backgroundTint="@color/blue"
                 android:background="@drawable/view_bg"
                 tools:ignore="HardcodedText" />
 

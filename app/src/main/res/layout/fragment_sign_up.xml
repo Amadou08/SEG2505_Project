@@ -165,6 +165,7 @@
                 android:layout_margin="10dp"
                 android:layout_marginBottom="30dp"
                 android:text="Register"
+                app:backgroundTint="@color/blue"
                 android:background="@drawable/view_bg"
                 tools:ignore="HardcodedText" />
 
