@@ -169,14 +169,14 @@ public class AddPhotoIdServiceActivity extends AppCompatActivity {
                         String id = null;
                         try {
                             id = createFavId().substring(0, 8);
-                            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("HealthCardService").child(id);
+                            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("PhotoIdService").child(id);
                             myRef.child("FirstName").setValue(et_first_name.getText().toString());
                             myRef.child("UserId").setValue(id);
                             myRef.child("LastName").setValue(et_last_name.getText().toString());
                             myRef.child("Address").setValue(et_address.getText().toString());
                             myRef.child("DOB").setValue(et_dob.getText().toString());
                             myRef.child("AddressImage").setValue(addressDocUrl);
-                            myRef.child("StatusImage").setValue(downloadUrl.toString());
+                            myRef.child("CustomerImage").setValue(downloadUrl.toString());
                             loadingDialog.dismiss();
                             Toast.makeText(AddPhotoIdServiceActivity.this,"photo id service added",Toast.LENGTH_LONG).show();
                             finish();
