@@ -107,7 +107,7 @@ public class AddLicenseServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 datePicker =  new DatePickerDialog(AddLicenseServiceActivity.this,date,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
-                datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePicker.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
                 datePicker.show();
             }
         });
@@ -162,6 +162,7 @@ public class AddLicenseServiceActivity extends AppCompatActivity {
                             myRef.child("Address").setValue(et_address.getText().toString());
                             myRef.child("DOB").setValue(et_dob.getText().toString());
                             myRef.child("AddressImage").setValue(downloadUrl.toString());
+                            myRef.child("Type").setValue(category);
                             loadingDialog.dismiss();
                             Toast.makeText(AddLicenseServiceActivity.this,"license service added",Toast.LENGTH_LONG).show();
                             finish();

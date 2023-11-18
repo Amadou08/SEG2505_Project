@@ -1,8 +1,12 @@
 package com.example.novigradservice.AdminScreens;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -10,8 +14,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +25,7 @@ import android.widget.TextView;
 import com.example.novigradservice.Model.HealthCard;
 import com.example.novigradservice.Model.License;
 import com.example.novigradservice.R;
+import com.example.novigradservice.Screens.AccountActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +45,7 @@ public class ViewHealthCardServiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_health_card_service);
         recyclerView=findViewById(R.id.recylerView);
-        recyclerView.setLayoutManager(new android.support.v7.widget.LinearLayoutManager(this, android.support.v7.widget.LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         //loading dialog
         loadingDialog=new Dialog(this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -91,7 +97,7 @@ public class ViewHealthCardServiceActivity extends AppCompatActivity {
         @NonNull
         @Override
         public ArrayAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v= LayoutInflater.from(ViewHealthCardServiceActivity.this).inflate(R.layout.item_license,parent,false);
+            View v= LayoutInflater.from(ViewHealthCardServiceActivity.this).inflate(R.layout.item_health_card,parent,false);
             return  new ArrayAdapter.ImageViewHolder(v);
         }
 
@@ -169,4 +175,5 @@ public class ViewHealthCardServiceActivity extends AppCompatActivity {
     public void addHealthCardService(View view){
         startActivity(new Intent(this,AddHealthCardServiceActivity.class));
     }
+
 }

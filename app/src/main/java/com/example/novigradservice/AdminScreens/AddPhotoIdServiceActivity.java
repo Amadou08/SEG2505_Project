@@ -91,7 +91,7 @@ public class AddPhotoIdServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 datePicker =  new DatePickerDialog(AddPhotoIdServiceActivity.this,date,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
-                datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePicker.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
                 datePicker.show();
             }
         });

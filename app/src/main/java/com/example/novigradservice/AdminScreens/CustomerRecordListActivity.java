@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.novigradservice.Model.HealthCard;
-import com.example.novigradservice.Model.PhotoId;
+import com.example.novigradservice.Model.User;
 import com.example.novigradservice.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,15 +29,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ViewPhotoIdServiceActivity extends AppCompatActivity {
+public class CustomerRecordListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private Dialog loadingDialog;
-    public  static ArrayList<PhotoId> photoIdArrayList=new ArrayList<PhotoId>();
-    ArrayAdapter arrayAdapter;
+    public  static ArrayList<User> userArrayList=new ArrayList<User>();
+   ArrayAdapter arrayAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_photo_id_service);
+        setContentView(R.layout.activity_customer_record_list);
         recyclerView=findViewById(R.id.recylerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         //loading dialog
@@ -57,19 +56,17 @@ public class ViewPhotoIdServiceActivity extends AppCompatActivity {
 
     public void getRecord(){
         loadingDialog.show();
-        photoIdArrayList.clear();
-        DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("PhotoIdService");
+        userArrayList.clear();
+        DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("Customer");
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                    photoIdArrayList.add(new PhotoId(dataSnapshot1.child("FirstName").getValue(String.class)
-                            ,dataSnapshot1.child("LastName").getValue(String.class)
+                    userArrayList.add(new User(dataSnapshot1.child("Name").getValue(String.class)
                             ,dataSnapshot1.child("Address").getValue(String.class)
-                            ,dataSnapshot1.child("DOB").getValue(String.class)
-                            ,dataSnapshot1.child("AddressImage").getValue(String.class)
-                            ,dataSnapshot1.child("CustomerImage").getValue(String.class)
+                            ,dataSnapshot1.child("PhoneNumber").getValue(String.class)
+                            ,dataSnapshot1.child("Mail").getValue(String.class)
                             ,dataSnapshot1.child("UserId").getValue(String.class)));
 
                 }
@@ -84,6 +81,7 @@ public class ViewPhotoIdServiceActivity extends AppCompatActivity {
             }
         });
     }
+
     public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ImageViewHolder> {
 
         public ArrayAdapter(){
@@ -92,41 +90,31 @@ public class ViewPhotoIdServiceActivity extends AppCompatActivity {
         @NonNull
         @Override
         public ArrayAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v= LayoutInflater.from(ViewPhotoIdServiceActivity.this).inflate(R.layout.item_health_card,parent,false);
+            View v= LayoutInflater.from(CustomerRecordListActivity.this).inflate(R.layout.item_customer,parent,false);
             return  new ArrayAdapter.ImageViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-            Picasso.with(ViewPhotoIdServiceActivity.this)
-                    .load(photoIdArrayList.get(position).getDocImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.doc_image);
-            Picasso.with(ViewPhotoIdServiceActivity.this)
-                    .load(photoIdArrayList.get(position).getCustomerImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.status_img);
-            holder.user_dob.setText(photoIdArrayList.get(position).getDob());
-            holder.user_address.setText(photoIdArrayList.get(position).getAddress());
-            holder.name.setText(photoIdArrayList.get(position).getFirstName()+" "+photoIdArrayList.get(position).getLastName());
+
+            holder.user_address.setText("Address : "+userArrayList.get(position).getAddress());
+            holder.user_number.setText("Number : "+userArrayList.get(position).getPhoneNumber());
+            holder.name.setText("Name : "+userArrayList.get(position).getUserName());
+            holder.user_mail.setText("Mail : "+userArrayList.get(position).getUserEmail());
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final CharSequence[] options = {"Delete","Update", "Cancel"};
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewPhotoIdServiceActivity.this);
+                    final CharSequence[] options = {"Delete", "Cancel"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CustomerRecordListActivity.this);
                     builder.setTitle("Select option");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int item) {
                             if (options[item].equals("Delete")) {
                                 DatabaseReference databaseReference =
-                                        FirebaseDatabase.getInstance().getReference("PhotoIdService").
-                                                child(photoIdArrayList.get(position).getUserId());
+                                        FirebaseDatabase.getInstance().getReference("Customer").
+                                                child(userArrayList.get(position).getUserId());
                                 databaseReference.removeValue();
                                 dialog.dismiss();
                                 getRecord();
@@ -149,25 +137,21 @@ public class ViewPhotoIdServiceActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return photoIdArrayList.size();
+            return userArrayList.size();
         }
 
         public class ImageViewHolder extends  RecyclerView.ViewHolder {
-            TextView name,user_address,user_dob;
-            ImageView doc_image,status_img;
+            TextView name,user_address,user_mail,user_number;
+
             CardView cardView;
             public ImageViewHolder(@NonNull View itemView) {
                 super(itemView);
                 name=itemView.findViewById(R.id.user_name);
-                user_dob=itemView.findViewById(R.id.user_dob);
+                user_mail=itemView.findViewById(R.id.user_mail);
                 user_address=itemView.findViewById(R.id.user_address);
-                doc_image=itemView.findViewById(R.id.doc_img);
-                status_img=itemView.findViewById(R.id.status_img);
                 cardView=itemView.findViewById(R.id.card);
+                user_number=itemView.findViewById(R.id.user_number);
             }
         }
-    }
-    public void addPhotoIdService(View view){
-        startActivity(new Intent(this,AddPhotoIdServiceActivity.class));
     }
 }

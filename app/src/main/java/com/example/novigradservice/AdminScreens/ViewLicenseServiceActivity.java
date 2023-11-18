@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -11,8 +12,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,7 @@ public class ViewLicenseServiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_license_service);
         recyclerView=findViewById(R.id.recylerView);
-        recyclerView.setLayoutManager(new android.support.v7.widget.LinearLayoutManager(this, android.support.v7.widget.LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         //loading dialog
         loadingDialog=new Dialog(this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -69,7 +68,8 @@ public class ViewLicenseServiceActivity extends AppCompatActivity {
                     ,dataSnapshot1.child("Address").getValue(String.class)
                     ,dataSnapshot1.child("DOB").getValue(String.class)
                     ,dataSnapshot1.child("AddressImage").getValue(String.class)
-                    ,dataSnapshot1.child("UserId").getValue(String.class)));
+                    ,dataSnapshot1.child("UserId").getValue(String.class)
+                            ,dataSnapshot1.child("Type").getValue(String.class)));
 
                 }
                 arrayAdapter =new ArrayAdapter();
@@ -105,6 +105,7 @@ public class ViewLicenseServiceActivity extends AppCompatActivity {
                     .centerCrop()
                     .into(holder.doc_image);
             holder.user_dob.setText(licenseArrayList.get(position).getDob());
+            holder.license_type.setText("License Type : "+licenseArrayList.get(position).getType());
             holder.user_address.setText(licenseArrayList.get(position).getAddress());
             holder.name.setText(licenseArrayList.get(position).getFirstName()+" "+licenseArrayList.get(position).getLastName());
             holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -146,12 +147,13 @@ public class ViewLicenseServiceActivity extends AppCompatActivity {
         }
 
         public class ImageViewHolder extends  RecyclerView.ViewHolder {
-            TextView name,user_address,user_dob;
+            TextView name,user_address,user_dob,license_type;
             ImageView doc_image;
             CardView cardView;
             public ImageViewHolder(@NonNull View itemView) {
                 super(itemView);
                 name=itemView.findViewById(R.id.user_name);
+                license_type=itemView.findViewById(R.id.license_type);
                 user_dob=itemView.findViewById(R.id.user_dob);
                 user_address=itemView.findViewById(R.id.user_address);
                 doc_image=itemView.findViewById(R.id.imageView);

@@ -94,7 +94,7 @@ public class AddHealthCardServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 datePicker =  new DatePickerDialog(AddHealthCardServiceActivity.this,date,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
-                datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePicker.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
                 datePicker.show();
             }
         });
@@ -211,7 +211,7 @@ public class AddHealthCardServiceActivity extends AppCompatActivity {
     }
     public void selectStatusImage(View view){
         Intent intent=new Intent(Intent.ACTION_PICK,android.provider. MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent,1);
+        startActivityForResult(intent,2);
     }
     public String createFavId() throws Exception{
         return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
