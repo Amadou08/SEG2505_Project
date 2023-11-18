@@ -17,6 +17,9 @@
         android:theme="@style/Theme.NovigradService"
         tools:targetApi="31">
         <activity
+            android:name=".AdminScreens.ViewLicenseServiceActivity"
+            android:exported="false" />
+        <activity
             android:name=".ServiceNovigradScreens.ServiceNovigradMainActivity"
             android:exported="false" />
         <activity
