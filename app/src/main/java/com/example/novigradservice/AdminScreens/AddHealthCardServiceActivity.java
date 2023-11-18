@@ -1,5 +1,6 @@
 package com.example.novigradservice.AdminScreens;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -26,6 +27,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.novigradservice.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -49,6 +59,7 @@ public class AddHealthCardServiceActivity extends AppCompatActivity {
     // StorageReference mRef;
     private Uri docImgUri =null;
     private Uri statusImgUri =null;
+    StorageReference mRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +70,7 @@ public class AddHealthCardServiceActivity extends AppCompatActivity {
         et_last_name=findViewById(R.id.et_last_name);
         docImage=findViewById(R.id.docPic);
         statusImage=findViewById(R.id.statusImage);
+        mRef= FirebaseStorage.getInstance().getReference("document_images");
         /////loading dialog
         loadingDialog=new Dialog(this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -102,13 +114,95 @@ public class AddHealthCardServiceActivity extends AppCompatActivity {
             Toast.makeText(AddHealthCardServiceActivity.this,"upload your document",Toast.LENGTH_LONG).show();
         }
         else {
-            uploadRecord();
+            getAddressDocImageUrl();
         }
 
     }
 
-    public void uploadRecord(){
+    public void getAddressDocImageUrl(){
+        loadingDialog.show();
+        StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(docImgUri));
+        storageReference.putFile(docImgUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful()) ;
+                        Uri downloadUrl = urlTask.getResult();
+                         uploadRecord(downloadUrl.toString());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        loadingDialog.dismiss();
+                        Toast.makeText(AddHealthCardServiceActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    }
+                });
+
+
+
+
+
+
+
+
+
+    }
+    public void uploadRecord(String addressDocUrl){
+        loadingDialog.show();
+        StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(statusImgUri));
+        storageReference.putFile(statusImgUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful()) ;
+                        Uri downloadUrl = urlTask.getResult();
+                        String id = null;
+                        try {
+                            id = createFavId().substring(0, 8);
+                            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("HealthCardService").child(id);
+                            myRef.child("FirstName").setValue(et_first_name.getText().toString());
+                            myRef.child("UserId").setValue(id);
+                            myRef.child("LastName").setValue(et_last_name.getText().toString());
+                            myRef.child("Address").setValue(et_address.getText().toString());
+                            myRef.child("DOB").setValue(et_dob.getText().toString());
+                            myRef.child("AddressImage").setValue(addressDocUrl);
+                            myRef.child("StatusImage").setValue(downloadUrl.toString());
+                            loadingDialog.dismiss();
+                            Toast.makeText(AddHealthCardServiceActivity.this,"health card service added",Toast.LENGTH_LONG).show();
+                            finish();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        loadingDialog.dismiss();
+                        Toast.makeText(AddHealthCardServiceActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    }
+                });
     }
 
     public void selectImage(View view){
