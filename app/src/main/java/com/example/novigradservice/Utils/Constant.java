@@ -14,12 +14,37 @@ public class Constant {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putString("id", s).commit();
     }
-    public static boolean getLoginStatus(Context context){
+    public static boolean getCustomerLoginStatus(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean("user", false);
+        return prefs.getBoolean("Customer", false);
     }
-    public static void setLoginStatus(Context context , boolean s){
+    public static void setCustomerLoginStatus(Context context , boolean s){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putBoolean("user", s).commit();
+        prefs.edit().putBoolean("Customer", s).commit();
+    }
+    public static boolean getServiceLoginStatus(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("Service", false);
+    }
+    public static void setServiceLoginStatus(Context context , boolean s){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putBoolean("Service", s).commit();
+    }
+    public static String getUsername(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("user", "");
+    }
+    public static void setUsername(Context context , String s){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString("user", s).commit();
+    }
+
+    public static boolean getAdminLoginStatus(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("Admin", false);
+    }
+    public static void setAdminLoginStatus(Context context , boolean s){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putBoolean("Admin", s).commit();
     }
 }

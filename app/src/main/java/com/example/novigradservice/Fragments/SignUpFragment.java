@@ -14,19 +14,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.novigradservice.R;
 import com.example.novigradservice.Screens.AccountActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class SignUpFragment extends Fragment {
-    private EditText etRegisterEmail,et_user_name, etRegisterPassword, etRegisterConfirmPassword,et_user_number,et_user_address;
+    private EditText etRegisterEmail,et_user_name,
+            etRegisterPassword, etRegisterConfirmPassword,et_user_number,et_user_address;
 
     TextView tv_login;
     Button btnRegister;
     private Dialog loadingDialog;
   RadioButton customerChecked,serviceChecked;
-
+    private FirebaseAuth firebaseAuth;
+    DatabaseReference myRef;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,7 +75,7 @@ public class SignUpFragment extends Fragment {
                 String confirm_password = etRegisterConfirmPassword.getText().toString();
                 String user_number =et_user_number.getText().toString();
                 String address=et_user_address.getText().toString();
-                if (validate(email,name, password, confirm_password,user_number ,address)) requestRegister(email,name, confirm_password,user_number,address);
+                if (validate(email,name, password, confirm_password,user_number ,address)) requestRegister(email, confirm_password);
             }
         });
         return view;
@@ -86,8 +94,46 @@ public class SignUpFragment extends Fragment {
         else return true;
         return false;
     }
+    private void requestRegister(String email, String password) {
+        loadingDialog.show();
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getCreateUserWithEmailOnClickListener(email));
+    }
+    private OnCompleteListener<AuthResult> getCreateUserWithEmailOnClickListener(String email) {
+        return task -> {
+            if (task.isSuccessful()) {
+                add();
+            } else {
+                loadingDialog.dismiss();
+                Toast.makeText(getContext(),"Registration failed!",Toast.LENGTH_LONG).show();
 
-    private void requestRegister(String email, String name,  String confirm_password, String user_number,String address) {
+            }
+        };
+    }
+    public void  add(){
+        String id = firebaseAuth.getCurrentUser().getUid();
+        if(customerChecked.isChecked()){
+            myRef=  FirebaseDatabase.getInstance().getReference("Customer").child(id);
+            myRef.child("Name").setValue(et_user_name.getText().toString());
+            myRef.child("UserId").setValue(id);
+            myRef.child("Mail").setValue(etRegisterEmail.getText().toString());
+            myRef.child("Address").setValue(et_user_address.getText().toString());
+            myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
+            loadingDialog.dismiss();
+            Toast.makeText(getContext(),"Registration successful",Toast.LENGTH_LONG).show();
+            ((AccountActivity)getActivity()).showLoginScreen();
+        }
+        else if(serviceChecked.isChecked()){
+            myRef=  FirebaseDatabase.getInstance().getReference("ServiceNovigrad").child(id);
+            myRef.child("Name").setValue(et_user_name.getText().toString());
+            myRef.child("UserId").setValue(id);
+            myRef.child("Mail").setValue(etRegisterEmail.getText().toString());
+            myRef.child("Address").setValue(et_user_address.getText().toString());
+            myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
+            loadingDialog.dismiss();
+            Toast.makeText(getContext(),"Registration successful",Toast.LENGTH_LONG).show();
+            ((AccountActivity)getActivity()).showLoginScreen();
+        }
 
 
     }
