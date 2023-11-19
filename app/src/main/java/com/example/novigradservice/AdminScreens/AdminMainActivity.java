@@ -46,6 +46,10 @@ public class AdminMainActivity extends AppCompatActivity {
                     DatabaseReference databaseReference =
                             FirebaseDatabase.getInstance().getReference("LicenseService");
                     databaseReference.removeValue();
+
+                    DatabaseReference myRef =
+                            FirebaseDatabase.getInstance().getReference("LicenseServiceTime");
+                    myRef.removeValue();
                     dialog.dismiss();
                     Toast.makeText(AdminMainActivity.this,"all record deleted",Toast.LENGTH_LONG).show();
 
@@ -71,6 +75,9 @@ public class AdminMainActivity extends AppCompatActivity {
                     DatabaseReference databaseReference =
                             FirebaseDatabase.getInstance().getReference("HealthCardService");
                     databaseReference.removeValue();
+                    DatabaseReference myRef =
+                            FirebaseDatabase.getInstance().getReference("HealthCardServiceTime");
+                    myRef.removeValue();
                     dialog.dismiss();
                     Toast.makeText(AdminMainActivity.this,"all record deleted",Toast.LENGTH_LONG).show();
 
@@ -95,7 +102,11 @@ public class AdminMainActivity extends AppCompatActivity {
                     DatabaseReference databaseReference =
                             FirebaseDatabase.getInstance().getReference("PhotoIdService");
                     databaseReference.removeValue();
+                    DatabaseReference myRef =
+                            FirebaseDatabase.getInstance().getReference("PhotoIdServiceTime");
+                    myRef.removeValue();
                     dialog.dismiss();
+
                     Toast.makeText(AdminMainActivity.this,"all record deleted",Toast.LENGTH_LONG).show();
 
                 } else if (options[item].equals("Cancel")) {

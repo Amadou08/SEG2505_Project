@@ -62,7 +62,7 @@ public class LoginFragment extends Fragment {
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
+        firebaseAuth = FirebaseAuth.getInstance();
         etLoginEmail =view.findViewById(R.id.et_login_email);
         etLoginPassword = view.findViewById(R.id.et_login_password);
         tv_new_register=view.findViewById(R.id.tv_new_register);
@@ -121,7 +121,7 @@ public class LoginFragment extends Fragment {
     }
     public void getCustomerData(){
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        FirebaseDatabase.getInstance().getReference().child("Customer").child(firebaseUser.getUid());
+       DatabaseReference myRef= FirebaseDatabase.getInstance().getReference().child("Customer").child(firebaseUser.getUid());
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -151,7 +151,7 @@ public class LoginFragment extends Fragment {
     }
     public void getServiceNovigrad(){
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        FirebaseDatabase.getInstance().getReference().child("ServiceNovigrad").child(firebaseUser.getUid());
+      DatabaseReference  myRef= FirebaseDatabase.getInstance().getReference().child("ServiceNovigrad").child(firebaseUser.getUid());
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

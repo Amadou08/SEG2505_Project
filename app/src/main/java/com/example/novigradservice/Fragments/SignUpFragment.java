@@ -46,7 +46,7 @@ public class SignUpFragment extends Fragment {
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
+        firebaseAuth = FirebaseAuth.getInstance();
         customerChecked=view.findViewById(R.id.customerChecked);
         serviceChecked=view.findViewById(R.id.serviceChecked);
         et_user_number=view.findViewById(R.id.et_user_number);
