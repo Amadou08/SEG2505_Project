@@ -127,18 +127,22 @@ public class BranchWorkingActivity extends AppCompatActivity {
                 }
             }
         });
+        getData();
     }
 
     public void updateWorkingHours(){
         if(title.equals("LicenseService")){
-            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("LicenseServiceTime").child(timeId);
+            DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                    getReference("Services")
+                    .child("LicenseServiceTime").child(timeId);
             myRef.child("StartTime").setValue(et_start_time.getText().toString());
             myRef.child("EndTime").setValue(et_last_name.getText().toString());
             loadingDialog.dismiss();
             Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
             finish();
         }else if(title.equals("HealthCardService")){
-            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("HealthCardServiceTime").child(timeId);
+            DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                    getReference("Services").child("HealthCardServiceTime").child(timeId);
             myRef.child("StartTime").setValue(et_start_time.getText().toString());
 
             myRef.child("EndTime").setValue(et_last_name.getText().toString());
@@ -146,7 +150,8 @@ public class BranchWorkingActivity extends AppCompatActivity {
             Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
             finish();
         }else if(title.equals("PhotoIdService")){
-            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("PhotoIdServiceTime").child(timeId);
+            DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                    getReference("Services").child("PhotoIdServiceTime").child(timeId);
             myRef.child("StartTime").setValue(et_start_time.getText().toString());
             myRef.child("EndTime").setValue(et_last_name.getText().toString());
             loadingDialog.dismiss();
@@ -160,9 +165,12 @@ public class BranchWorkingActivity extends AppCompatActivity {
             String id = null;
             try {
                 id = createFavId().substring(0, 8);
-                DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("LicenseServiceTime").child(id);
+                DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                        getReference("Services").child("LicenseServiceTime").child(id);
                 myRef.child("StartTime").setValue(et_start_time.getText().toString());
                 myRef.child("Id").setValue(id);
+                myRef.child("Rating").setValue("5");
+                myRef.child("ServiceName").setValue("LicenseService");
                 myRef.child("EndTime").setValue(et_last_name.getText().toString());
                 loadingDialog.dismiss();
                 Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
@@ -175,9 +183,12 @@ public class BranchWorkingActivity extends AppCompatActivity {
             String id = null;
             try {
                 id = createFavId().substring(0, 8);
-                DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("HealthCardServiceTime").child(id);
+                DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                        getReference("Services").child("HealthCardServiceTime").child(id);
                 myRef.child("StartTime").setValue(et_start_time.getText().toString());
                 myRef.child("Id").setValue(id);
+                myRef.child("ServiceName").setValue("HealthCardService");
+                myRef.child("Rating").setValue("5");
                 myRef.child("EndTime").setValue(et_last_name.getText().toString());
                 loadingDialog.dismiss();
                 Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
@@ -190,9 +201,12 @@ public class BranchWorkingActivity extends AppCompatActivity {
             String id = null;
             try {
                 id = createFavId().substring(0, 8);
-                DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("PhotoIdServiceTime").child(id);
+                DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                        getReference("Services").child("PhotoIdServiceTime").child(id);
                 myRef.child("StartTime").setValue(et_start_time.getText().toString());
                 myRef.child("Id").setValue(id);
+                myRef.child("ServiceName").setValue("PhotoIdService");
+                myRef.child("Rating").setValue("5");
                 myRef.child("EndTime").setValue(et_last_name.getText().toString());
                 loadingDialog.dismiss();
                 Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
@@ -207,6 +221,7 @@ public class BranchWorkingActivity extends AppCompatActivity {
         return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
     }
     public void getData(){
+        loadingDialog.show();
         if(title.equals("LicenseService")){
             DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("LicenseServiceTime");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {

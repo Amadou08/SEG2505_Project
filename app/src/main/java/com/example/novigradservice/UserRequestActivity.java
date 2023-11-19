@@ -1,4 +1,4 @@
-package com.example.novigradservice.ServiceNovigradScreens;
+package com.example.novigradservice;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.novigradservice.AdminScreens.ViewHealthCardServiceActivity;
 import com.example.novigradservice.Model.ServiceRequest;
-import com.example.novigradservice.R;
-import com.example.novigradservice.UserRequestActivity;
+import com.example.novigradservice.Model.Services;
 import com.example.novigradservice.Utils.Constant;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class viewRequestRecordScreen extends AppCompatActivity {
+public class UserRequestActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private Dialog loadingDialog;
     public ArrayList<ServiceRequest> serviceRequestArrayList=new ArrayList<ServiceRequest>();
@@ -38,7 +35,7 @@ public class viewRequestRecordScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_request_record_screen);
+        setContentView(R.layout.activity_user_request);
         recyclerView=findViewById(R.id.recylerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         //loading dialog
@@ -64,14 +61,17 @@ public class viewRequestRecordScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                    serviceRequestArrayList.add(new ServiceRequest(
-                            dataSnapshot1.child("ServiceName").getValue(String.class)
-                            ,(dataSnapshot1.child("FirstName").getValue(String.class)+dataSnapshot1.child("LastName").getValue(String.class))
-                            ,dataSnapshot1.child("Address").getValue(String.class)
-                            ,dataSnapshot1.child("AddressImage").getValue(String.class)
-                            ,dataSnapshot1.child("Status").getValue(String.class)
-                            ,dataSnapshot1.child("ServiceId").getValue(String.class)
-                            ,dataSnapshot1.child("UserId").getValue(String.class)));
+                    if(Constant.getUserId(UserRequestActivity.this)
+                            .equals(dataSnapshot1.child("UserId").getValue(String.class))){
+                        serviceRequestArrayList.add(new ServiceRequest(
+                                dataSnapshot1.child("ServiceName").getValue(String.class)
+                                ,(dataSnapshot1.child("FirstName").getValue(String.class)+dataSnapshot1.child("LastName").getValue(String.class))
+                                ,dataSnapshot1.child("Address").getValue(String.class)
+                                ,dataSnapshot1.child("AddressImage").getValue(String.class)
+                                ,dataSnapshot1.child("Status").getValue(String.class)
+                                ,dataSnapshot1.child("ServiceId").getValue(String.class)
+                                ,dataSnapshot1.child("UserId").getValue(String.class)));
+                    }
 
 
                 }
@@ -95,7 +95,7 @@ public class viewRequestRecordScreen extends AppCompatActivity {
         @NonNull
         @Override
         public ArrayAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v= LayoutInflater.from(viewRequestRecordScreen.this).inflate(R.layout.item_service_request,parent,false);
+            View v= LayoutInflater.from(UserRequestActivity.this).inflate(R.layout.item_service_request,parent,false);
             return  new ArrayAdapter.ImageViewHolder(v);
         }
 
@@ -110,32 +110,9 @@ public class viewRequestRecordScreen extends AppCompatActivity {
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final CharSequence[] options = {"Approve","Reject", "Cancel"};
-                    AlertDialog.Builder builder = new AlertDialog.Builder(viewRequestRecordScreen.this);
-                    builder.setTitle("Update Request Status");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int item) {
-                            if (options[item].equals("Approve")) {
+                 if(serviceRequestArrayList.get(position).getServiceStatus().equals("Approve")){
 
-                                DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("ServiceRequests").child(serviceRequestArrayList.get(position)
-                                        .getServiceRequestId());
-                                myRef.child("Status").setValue("Approve");
-                                getRecord();
-
-                            } else if (options[item].equals("Cancel")) {
-                                dialog.dismiss();
-                            }
-                            else if (options[item].equals("Reject")) {
-                                DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("ServiceRequests")
-                                        .child(serviceRequestArrayList.get(position).getServiceRequestId());
-                                myRef.child("Status").setValue("Reject");
-                                getRecord();
-
-                            }
-                        }
-                    });
-                    builder.show();
+                 }
                 }
             });
         }
@@ -147,7 +124,7 @@ public class viewRequestRecordScreen extends AppCompatActivity {
 
         public class ImageViewHolder extends  RecyclerView.ViewHolder {
             TextView service_status,user_address,service_name,user_name;
-            ImageView imageView;
+         ImageView imageView;
             CardView cardView;
             public ImageViewHolder(@NonNull View itemView) {
                 super(itemView);

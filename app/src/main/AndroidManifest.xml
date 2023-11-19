@@ -17,6 +17,15 @@
         android:theme="@style/Theme.NovigradService"
         tools:targetApi="31">
         <activity
+            android:name=".RatingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddServiceRequestActivity"
+            android:exported="false" />
+        <activity
             android:name=".ServiceNovigradScreens.BranchWorkingActivity"
             android:exported="false" />
         <activity
