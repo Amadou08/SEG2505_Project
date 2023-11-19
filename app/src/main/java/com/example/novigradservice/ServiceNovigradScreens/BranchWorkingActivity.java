@@ -28,13 +28,13 @@ import java.util.UUID;
 
 public class BranchWorkingActivity extends AppCompatActivity {
           TextView tv_title;
-          EditText et_start_time,et_last_name;
+          EditText et_start_time,et_end_time;
           String title;
           Button btn_save;
           boolean serviceStatus=false;
 
     private Dialog loadingDialog;
-    String timeId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +51,7 @@ public class BranchWorkingActivity extends AppCompatActivity {
 
         tv_title.setText(title);
         btn_save=findViewById(R.id.btn_save);
-        et_last_name=findViewById(R.id.et_last_name);
+        et_end_time=findViewById(R.id.et_end_time);
         et_start_time=findViewById(R.id.et_start_time);
 
         et_start_time.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +82,7 @@ public class BranchWorkingActivity extends AppCompatActivity {
             }
         });
 
-        et_last_name.setOnClickListener(new View.OnClickListener() {
+        et_end_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Get the current time
@@ -97,7 +97,7 @@ public class BranchWorkingActivity extends AppCompatActivity {
                             @Override
                             public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                                 // Display the selected time in the EditText
-                                et_last_name.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
+                                et_end_time.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
                             }
                         },
                         hour,
@@ -110,12 +110,7 @@ public class BranchWorkingActivity extends AppCompatActivity {
             }
         });
 
-        et_last_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,26 +129,26 @@ public class BranchWorkingActivity extends AppCompatActivity {
         if(title.equals("LicenseService")){
             DatabaseReference myRef=  FirebaseDatabase.getInstance().
                     getReference("Services")
-                    .child("LicenseServiceTime").child(timeId);
+                    .child("LicenseServiceTime");
             myRef.child("StartTime").setValue(et_start_time.getText().toString());
-            myRef.child("EndTime").setValue(et_last_name.getText().toString());
+            myRef.child("EndTime").setValue(et_end_time.getText().toString());
             loadingDialog.dismiss();
             Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
             finish();
         }else if(title.equals("HealthCardService")){
             DatabaseReference myRef=  FirebaseDatabase.getInstance().
-                    getReference("Services").child("HealthCardServiceTime").child(timeId);
+                    getReference("Services").child("HealthCardServiceTime");
             myRef.child("StartTime").setValue(et_start_time.getText().toString());
 
-            myRef.child("EndTime").setValue(et_last_name.getText().toString());
+            myRef.child("EndTime").setValue(et_end_time.getText().toString());
             loadingDialog.dismiss();
             Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
             finish();
         }else if(title.equals("PhotoIdService")){
             DatabaseReference myRef=  FirebaseDatabase.getInstance().
-                    getReference("Services").child("PhotoIdServiceTime").child(timeId);
+                    getReference("Services").child("PhotoIdServiceTime");
             myRef.child("StartTime").setValue(et_start_time.getText().toString());
-            myRef.child("EndTime").setValue(et_last_name.getText().toString());
+            myRef.child("EndTime").setValue(et_end_time.getText().toString());
             loadingDialog.dismiss();
             Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
             finish();
@@ -162,58 +157,38 @@ public class BranchWorkingActivity extends AppCompatActivity {
     public void addWorkingHours(){
         loadingDialog.show();
         if(title.equals("LicenseService")){
-            String id = null;
-            try {
-                id = createFavId().substring(0, 8);
-                DatabaseReference myRef=  FirebaseDatabase.getInstance().
-                        getReference("Services").child("LicenseServiceTime").child(id);
-                myRef.child("StartTime").setValue(et_start_time.getText().toString());
-                myRef.child("Id").setValue(id);
-                myRef.child("Rating").setValue("5");
-                myRef.child("ServiceName").setValue("LicenseService");
-                myRef.child("EndTime").setValue(et_last_name.getText().toString());
-                loadingDialog.dismiss();
-                Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
-                finish();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                    getReference("Services").child("LicenseServiceTime");
+            myRef.child("StartTime").setValue(et_start_time.getText().toString());
+            myRef.child("Rating").setValue("5");
+            myRef.child("ServiceName").setValue("LicenseService");
+            myRef.child("EndTime").setValue(et_end_time.getText().toString());
+            loadingDialog.dismiss();
+            Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
+            finish();
 
         }else if(title.equals("HealthCardService")){
-            String id = null;
-            try {
-                id = createFavId().substring(0, 8);
-                DatabaseReference myRef=  FirebaseDatabase.getInstance().
-                        getReference("Services").child("HealthCardServiceTime").child(id);
-                myRef.child("StartTime").setValue(et_start_time.getText().toString());
-                myRef.child("Id").setValue(id);
-                myRef.child("ServiceName").setValue("HealthCardService");
-                myRef.child("Rating").setValue("5");
-                myRef.child("EndTime").setValue(et_last_name.getText().toString());
-                loadingDialog.dismiss();
-                Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
-                finish();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                    getReference("Services").child("HealthCardServiceTime");
+            myRef.child("StartTime").setValue(et_start_time.getText().toString());
+            myRef.child("ServiceName").setValue("HealthCardService");
+            myRef.child("Rating").setValue("5");
+            myRef.child("EndTime").setValue(et_end_time.getText().toString());
+            loadingDialog.dismiss();
+            Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
+            finish();
 
         }else if(title.equals("PhotoIdService")){
-            String id = null;
-            try {
-                id = createFavId().substring(0, 8);
-                DatabaseReference myRef=  FirebaseDatabase.getInstance().
-                        getReference("Services").child("PhotoIdServiceTime").child(id);
-                myRef.child("StartTime").setValue(et_start_time.getText().toString());
-                myRef.child("Id").setValue(id);
-                myRef.child("ServiceName").setValue("PhotoIdService");
-                myRef.child("Rating").setValue("5");
-                myRef.child("EndTime").setValue(et_last_name.getText().toString());
-                loadingDialog.dismiss();
-                Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
-                finish();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                    getReference("Services").child("PhotoIdServiceTime");
+            myRef.child("StartTime").setValue(et_start_time.getText().toString());
+
+            myRef.child("ServiceName").setValue("PhotoIdService");
+            myRef.child("Rating").setValue("5");
+            myRef.child("EndTime").setValue(et_end_time.getText().toString());
+            loadingDialog.dismiss();
+            Toast.makeText(BranchWorkingActivity.this,"time added",Toast.LENGTH_LONG).show();
+            finish();
 
         }
     }
@@ -223,14 +198,15 @@ public class BranchWorkingActivity extends AppCompatActivity {
     public void getData(){
         loadingDialog.show();
         if(title.equals("LicenseService")){
-            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("LicenseServiceTime");
+            DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                    getReference("Services").child("LicenseServiceTime");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getValue()!=null){
                       et_start_time.setText(dataSnapshot.child("StartTime").getValue(String.class));
-                      et_last_name.setText(dataSnapshot.child("EndTime").getValue(String.class));
-                                timeId=dataSnapshot.child("Id").getValue(String.class);
+                        et_end_time.setText(dataSnapshot.child("EndTime").getValue(String.class));
+
                                   serviceStatus=true;
                                   btn_save.setText("update");
                     }
@@ -250,14 +226,15 @@ public class BranchWorkingActivity extends AppCompatActivity {
 
 
         }else if(title.equals("HealthCardService")){
-            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("HealthCardServiceTime");
+            DatabaseReference myRef=  FirebaseDatabase.getInstance()
+                    .getReference("Services").child("HealthCardServiceTime");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getValue()!=null){
                         et_start_time.setText(dataSnapshot.child("StartTime").getValue(String.class));
-                        et_last_name.setText(dataSnapshot.child("EndTime").getValue(String.class));
-                        timeId=dataSnapshot.child("Id").getValue(String.class);
+                        et_end_time.setText(dataSnapshot.child("EndTime").getValue(String.class));
+
                         serviceStatus=true;
                         btn_save.setText("update");
                     }
@@ -276,14 +253,15 @@ public class BranchWorkingActivity extends AppCompatActivity {
             });
 
         }else if(title.equals("PhotoIdService")){
-            DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("PhotoIdServiceTime");
+            DatabaseReference myRef=  FirebaseDatabase.getInstance().
+                    getReference("Services").child("PhotoIdServiceTime");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getValue()!=null){
                         et_start_time.setText(dataSnapshot.child("StartTime").getValue(String.class));
-                        et_last_name.setText(dataSnapshot.child("EndTime").getValue(String.class));
-                        timeId=dataSnapshot.child("Id").getValue(String.class);
+                        et_end_time.setText(dataSnapshot.child("EndTime").getValue(String.class));
+
                         serviceStatus=true;
                         btn_save.setText("update");
                     }

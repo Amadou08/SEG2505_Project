@@ -122,7 +122,7 @@ public class ViewHealthCardServiceActivity extends AppCompatActivity {
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final CharSequence[] options = {"Delete","Update", "Cancel"};
+                    final CharSequence[] options = {"Delete", "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(ViewHealthCardServiceActivity.this);
                     builder.setTitle("Select option");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -138,9 +138,7 @@ public class ViewHealthCardServiceActivity extends AppCompatActivity {
                             } else if (options[item].equals("Cancel")) {
                                 dialog.dismiss();
                             }
-                            else if (options[item].equals("Update")) {
 
-                            }
                         }
                     });
                     builder.show();

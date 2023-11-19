@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.example.novigradservice.R;
 import com.example.novigradservice.Screens.AccountActivity;
+import com.example.novigradservice.ServiceNovigradScreens.BranchWorkingActivity;
+import com.example.novigradservice.ServiceNovigradScreens.ViewLicenseServiceScreen;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,9 +56,15 @@ public class AdminMainActivity extends AppCompatActivity {
                     dialog.dismiss();
                     Toast.makeText(AdminMainActivity.this,"all record deleted",Toast.LENGTH_LONG).show();
 
-                } else if (options[item].equals("Cancel")) {
+                }
+                else if (options[item].equals("Update Record")) {
+                    startActivity(new Intent(AdminMainActivity.this,
+                            BranchWorkingActivity.class)
+                            .putExtra("title","LicenseService"));
+                }else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
+
                 else if (options[item].equals("View Record")) {
               startActivity(new Intent(AdminMainActivity.this,ViewLicenseServiceActivity.class));
                 }
@@ -86,6 +94,11 @@ public class AdminMainActivity extends AppCompatActivity {
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
+                else if (options[item].equals("Update Record")) {
+                    startActivity(new Intent(AdminMainActivity.this,
+                            BranchWorkingActivity.class)
+                            .putExtra("title","HealthCardService"));
+                }
                 else if (options[item].equals("View Record")) {
                     startActivity(new Intent(AdminMainActivity.this,ViewHealthCardServiceActivity.class));
                 }
@@ -94,7 +107,7 @@ public class AdminMainActivity extends AppCompatActivity {
         builder.show();
     }
     public void btnPhotoIdClicked(View view){
-        final CharSequence[] options = {"Delete Record","View Record", "Cancel"};
+        final CharSequence[] options = {"Delete Record","View Record","Update Record", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(AdminMainActivity.this);
         builder.setTitle("Select option");
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -114,6 +127,10 @@ public class AdminMainActivity extends AppCompatActivity {
 
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
+                }else if (options[item].equals("Update Record")) {
+                    startActivity(new Intent(AdminMainActivity.this,
+                            BranchWorkingActivity.class)
+                            .putExtra("title","PhotoIdService"));
                 }
                 else if (options[item].equals("View Record")) {
                     startActivity(new Intent(AdminMainActivity.this,ViewPhotoIdServiceActivity.class));

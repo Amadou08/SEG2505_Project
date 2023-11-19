@@ -107,13 +107,12 @@ public class MainActivity extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                for(DataSnapshot dataSnapshot2:dataSnapshot.getChildren()){
                     servicesArrayList.add(new Services(
-                            dataSnapshot1.child("ServiceName").getValue(String.class)
-                            ,dataSnapshot1.child("StartTime").getValue(String.class)
-                            ,dataSnapshot1.child("EndTime").getValue(String.class)
-                            ,dataSnapshot1.child("Rating").getValue(String.class)
-                            ,dataSnapshot1.child("Id").getValue(String.class)));
+                            dataSnapshot2.child("ServiceName").getValue(String.class)
+                            ,dataSnapshot2.child("StartTime").getValue(String.class)
+                            ,dataSnapshot2.child("EndTime").getValue(String.class)
+                            ,dataSnapshot2.child("Rating").getValue(String.class)));
 
                 }
                 arrayAdapter =new ArrayAdapter();

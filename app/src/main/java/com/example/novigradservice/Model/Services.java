@@ -1,14 +1,13 @@
 package com.example.novigradservice.Model;
 
 public class Services {
-    String name,start_time,end_time,rating,serviceId;
+    String name,start_time,end_time,rating;
 
-    public Services(String name, String start_time, String end_time, String rating, String serviceId) {
+    public Services(String name, String start_time, String end_time, String rating) {
         this.name = name;
         this.start_time = start_time;
         this.end_time = end_time;
         this.rating = rating;
-        this.serviceId = serviceId;
     }
 
     public String getName() {
@@ -27,7 +26,5 @@ public class Services {
         return rating;
     }
 
-    public String getServiceId() {
-        return serviceId;
-    }
+
 }

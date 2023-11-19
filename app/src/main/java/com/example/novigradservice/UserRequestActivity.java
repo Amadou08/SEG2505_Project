@@ -111,7 +111,8 @@ public class UserRequestActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                  if(serviceRequestArrayList.get(position).getServiceStatus().equals("Approve")){
-
+                              startActivity(new Intent(UserRequestActivity.this,RatingActivity.class)
+                                      .putExtra("ServiceName",serviceRequestArrayList.get(position).getServiceName()));
                  }
                 }
             });
