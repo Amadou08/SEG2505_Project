@@ -200,11 +200,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, AccountActivity.class));
             finish();
         }if (menuItemId == R.id.requites) {
-            setAdminLoginStatus(MainActivity.this,false);
-            setCustomerLoginStatus(MainActivity.this,false);
-            setServiceLoginStatus(MainActivity.this,false);
-            startActivity(new Intent(MainActivity.this, AccountActivity.class));
-            finish();
+
+            startActivity(new Intent(MainActivity.this, UserRequestActivity.class));
+
         } else {
             return super.onOptionsItemSelected(item);
         }
