@@ -80,8 +80,23 @@ public class AddServiceRequestActivity extends AppCompatActivity {
             et_address.setError("required");
         }
         else if(imgUri==null){
-            Toast.makeText(AddServiceRequestActivity.this,"upload your document",Toast.LENGTH_LONG).show();
-        }
+            String id = null;
+            try {
+                id = createFavId().substring(0, 8);
+                DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("ServiceRequests").child(id);
+                myRef.child("FirstName").setValue(et_first_name.getText().toString());
+                myRef.child("ServiceId").setValue(id);
+                myRef.child("LastName").setValue(et_last_name.getText().toString());
+                myRef.child("Address").setValue(et_address.getText().toString());
+                myRef.child("AddressImage").setValue("empty");
+                myRef.child("Status").setValue("Pending");
+                myRef.child("UserId").setValue(Constant.getUserId(AddServiceRequestActivity.this));
+                loadingDialog.dismiss();
+                Toast.makeText(AddServiceRequestActivity.this,"request send",Toast.LENGTH_LONG).show();
+                finish();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }        }
         else {
             uploadRecord();
         }

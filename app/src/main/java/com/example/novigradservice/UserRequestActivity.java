@@ -18,12 +18,15 @@ import android.widget.TextView;
 
 import com.example.novigradservice.Model.ServiceRequest;
 import com.example.novigradservice.Model.Services;
+import com.example.novigradservice.ServiceNovigradScreens.ViewLicenseServiceScreen;
+import com.example.novigradservice.ServiceNovigradScreens.viewRequestRecordScreen;
 import com.example.novigradservice.Utils.Constant;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -103,6 +106,18 @@ public class UserRequestActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
 
+
+
+            if(serviceRequestArrayList.get(position).getAddressDoc().equals("empty")){
+                holder.imageView.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(UserRequestActivity.this)
+                        .load(serviceRequestArrayList.get(position).getAddressDoc())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.imageView);
+            }
             holder.service_name.setText("Service Name : "+serviceRequestArrayList.get(position).getServiceName());
             holder.user_name.setText("User Name : "+serviceRequestArrayList.get(position).getUserName());
             holder.user_address.setText("Address : "+serviceRequestArrayList.get(position).getAddress());

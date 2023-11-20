@@ -132,7 +132,23 @@ public class AddLicenseServiceActivity extends AppCompatActivity {
                  et_dob.setError("required");
              }
              else if(imgUri==null){
-                 Toast.makeText(AddLicenseServiceActivity.this,"upload your document",Toast.LENGTH_LONG).show();
+                 String id = null;
+                 try {
+                     id = createFavId().substring(0, 8);
+                     DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("LicenseService").child(id);
+                     myRef.child("FirstName").setValue(et_first_name.getText().toString());
+                     myRef.child("UserId").setValue(id);
+                     myRef.child("LastName").setValue(et_last_name.getText().toString());
+                     myRef.child("Address").setValue(et_address.getText().toString());
+                     myRef.child("DOB").setValue(et_dob.getText().toString());
+                     myRef.child("AddressImage").setValue("empty");
+                     myRef.child("Type").setValue(category);
+                     loadingDialog.dismiss();
+                     Toast.makeText(AddLicenseServiceActivity.this,"license service added",Toast.LENGTH_LONG).show();
+                     finish();
+                 } catch (Exception e) {
+                     throw new RuntimeException(e);
+                 }
              }
              else {
                  uploadRecord();

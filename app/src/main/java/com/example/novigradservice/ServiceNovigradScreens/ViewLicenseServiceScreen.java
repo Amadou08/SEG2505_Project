@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.novigradservice.Model.License;
 import com.example.novigradservice.R;
+import com.example.novigradservice.UserRequestActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -98,12 +99,17 @@ public class ViewLicenseServiceScreen extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-            Picasso.with(ViewLicenseServiceScreen.this)
-                    .load(licenseArrayList.get(position).getDocImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.doc_image);
+
+            if(licenseArrayList.get(position).getDocImg().equals("empty")){
+                holder.doc_image.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(ViewLicenseServiceScreen.this)
+                        .load(licenseArrayList.get(position).getDocImg())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.doc_image);
+            }
             holder.user_dob.setText(licenseArrayList.get(position).getDob());
             holder.license_type.setText("License Type : "+licenseArrayList.get(position).getType());
             holder.user_address.setText(licenseArrayList.get(position).getAddress());

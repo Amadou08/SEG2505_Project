@@ -103,19 +103,27 @@ public class ViewHealthCardServiceActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHolder holder, @SuppressLint("RecyclerView") int position) {
+            if(healthCardArrayList.get(position).getDocImg().equals("empty")){
+                holder.doc_image.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(ViewHealthCardServiceActivity.this)
+                        .load(healthCardArrayList.get(position).getDocImg())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.doc_image);
+            }
+            if(healthCardArrayList.get(position).getStatusImg().equals("empty")){
+                holder.status_img.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(ViewHealthCardServiceActivity.this)
+                        .load(healthCardArrayList.get(position).getStatusImg())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.status_img);
+            }
 
-            Picasso.with(ViewHealthCardServiceActivity.this)
-                    .load(healthCardArrayList.get(position).getDocImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.doc_image);
-            Picasso.with(ViewHealthCardServiceActivity.this)
-                    .load(healthCardArrayList.get(position).getStatusImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.status_img);
             holder.user_dob.setText(healthCardArrayList.get(position).getDob());
             holder.user_address.setText(healthCardArrayList.get(position).getAddress());
             holder.name.setText(healthCardArrayList.get(position).getFirstName()+" "+healthCardArrayList.get(position).getLastName());

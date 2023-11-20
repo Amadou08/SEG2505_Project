@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -101,7 +102,16 @@ public class viewRequestRecordScreen extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHolder holder, @SuppressLint("RecyclerView") int position) {
-
+            if(serviceRequestArrayList.get(position).getAddressDoc().equals("empty")){
+                 holder.imageView.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(viewRequestRecordScreen.this)
+                        .load(serviceRequestArrayList.get(position).getAddressDoc())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.imageView);
+            }
 
             holder.service_name.setText("Service Name : "+serviceRequestArrayList.get(position).getServiceName());
             holder.user_name.setText("User Name : "+serviceRequestArrayList.get(position).getUserName());

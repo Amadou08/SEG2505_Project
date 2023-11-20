@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.novigradservice.AdminScreens.ViewPhotoIdServiceActivity;
 import com.example.novigradservice.Model.PhotoId;
 import com.example.novigradservice.R;
 import com.google.firebase.database.DataSnapshot;
@@ -98,18 +99,26 @@ public class ViewPhotoIdServiceScreen extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-            Picasso.with(ViewPhotoIdServiceScreen.this)
-                    .load(photoIdArrayList.get(position).getDocImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.doc_image);
-            Picasso.with(ViewPhotoIdServiceScreen.this)
-                    .load(photoIdArrayList.get(position).getCustomerImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.status_img);
+            if(photoIdArrayList.get(position).getDocImg().equals("empty")){
+                holder.doc_image.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(ViewPhotoIdServiceScreen.this)
+                        .load(photoIdArrayList.get(position).getDocImg())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.doc_image);
+            }
+            if(photoIdArrayList.get(position).getCustomerImg().equals("empty")){
+                holder.status_img.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(ViewPhotoIdServiceScreen.this)
+                        .load(photoIdArrayList.get(position).getCustomerImg())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.status_img);
+            }
             holder.user_dob.setText(photoIdArrayList.get(position).getDob());
             holder.user_address.setText(photoIdArrayList.get(position).getAddress());
             holder.name.setText(photoIdArrayList.get(position).getFirstName()+" "+photoIdArrayList.get(position).getLastName());

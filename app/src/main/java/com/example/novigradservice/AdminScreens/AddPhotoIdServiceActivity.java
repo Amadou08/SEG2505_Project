@@ -105,10 +105,25 @@ public class AddPhotoIdServiceActivity extends AppCompatActivity {
         }else if(et_dob.getText().toString().isEmpty()){
             et_dob.setError("required");
         }
-        else if(docImgUri==null){
-            Toast.makeText(AddPhotoIdServiceActivity.this,"upload your document",Toast.LENGTH_LONG).show();
-        } else if(customerImgUri==null){
-            Toast.makeText(AddPhotoIdServiceActivity.this,"upload your document",Toast.LENGTH_LONG).show();
+        else if(docImgUri==null&&customerImgUri==null){
+            String id = null;
+            try {
+                id = createFavId().substring(0, 8);
+                DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("PhotoIdService").child(id);
+                myRef.child("FirstName").setValue(et_first_name.getText().toString());
+                myRef.child("UserId").setValue(id);
+                myRef.child("LastName").setValue(et_last_name.getText().toString());
+                myRef.child("Address").setValue(et_address.getText().toString());
+                myRef.child("DOB").setValue(et_dob.getText().toString());
+                myRef.child("AddressImage").setValue("empty");
+                myRef.child("CustomerImage").setValue("empty");
+                loadingDialog.dismiss();
+                finish();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if(customerImgUri!=null&&docImgUri==null){
+            uploadRecord("empty");
         }
         else {
            getAddressDocImageUrl();
@@ -128,7 +143,28 @@ public class AddPhotoIdServiceActivity extends AppCompatActivity {
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while (!urlTask.isSuccessful()) ;
                         Uri downloadUrl = urlTask.getResult();
-                        uploadRecord(downloadUrl.toString());
+                        if(customerImgUri==null){
+                            String id = null;
+                            try {
+                                id = createFavId().substring(0, 8);
+                                DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference("PhotoIdService").child(id);
+                                myRef.child("FirstName").setValue(et_first_name.getText().toString());
+                                myRef.child("UserId").setValue(id);
+                                myRef.child("LastName").setValue(et_last_name.getText().toString());
+                                myRef.child("Address").setValue(et_address.getText().toString());
+                                myRef.child("DOB").setValue(et_dob.getText().toString());
+                                myRef.child("AddressImage").setValue(downloadUrl.toString());
+                                myRef.child("CustomerImage").setValue("empty");
+                                loadingDialog.dismiss();
+                                Toast.makeText(AddPhotoIdServiceActivity.this,"photo id service added",Toast.LENGTH_LONG).show();
+                                finish();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }else {
+                            uploadRecord(downloadUrl.toString());
+
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

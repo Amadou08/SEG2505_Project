@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.novigradservice.Model.HealthCard;
 import com.example.novigradservice.Model.PhotoId;
 import com.example.novigradservice.R;
+import com.example.novigradservice.ServiceNovigradScreens.ViewHealthCardServiceScreen;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -99,18 +100,27 @@ public class ViewPhotoIdServiceActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-            Picasso.with(ViewPhotoIdServiceActivity.this)
-                    .load(photoIdArrayList.get(position).getDocImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.doc_image);
-            Picasso.with(ViewPhotoIdServiceActivity.this)
-                    .load(photoIdArrayList.get(position).getCustomerImg())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.status_img);
+            if(photoIdArrayList.get(position).getDocImg().equals("empty")){
+                holder.doc_image.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(ViewPhotoIdServiceActivity.this)
+                        .load(photoIdArrayList.get(position).getDocImg())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.doc_image);
+            }
+            if(photoIdArrayList.get(position).getCustomerImg().equals("empty")){
+                holder.status_img.setImageDrawable(getDrawable(R.drawable.upload_icon));
+            }else {
+                Picasso.with(ViewPhotoIdServiceActivity.this)
+                        .load(photoIdArrayList.get(position).getCustomerImg())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.status_img);
+            }
+
             holder.user_dob.setText(photoIdArrayList.get(position).getDob());
             holder.user_address.setText(photoIdArrayList.get(position).getAddress());
             holder.name.setText(photoIdArrayList.get(position).getFirstName()+" "+photoIdArrayList.get(position).getLastName());
