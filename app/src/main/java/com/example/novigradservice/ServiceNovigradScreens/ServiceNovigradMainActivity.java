@@ -32,7 +32,7 @@ public class ServiceNovigradMainActivity extends AppCompatActivity {
 
     }
     public void btnHealthCardClicked(View view){
-        startActivity(new Intent(ServiceNovigradMainActivity.this, ViewPhotoIdServiceScreen.class));
+        startActivity(new Intent(ServiceNovigradMainActivity.this, ViewHealthCardServiceScreen.class));
 
     }
     public void btnPhotoIdClicked(View view){
